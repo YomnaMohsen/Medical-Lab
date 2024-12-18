@@ -1,0 +1,19 @@
+{
+  "name": "medical-lab",
+  "version": "1.0.0",
+  "description": "medical investigation-lab website",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Yomna Mohsen",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.1",
+    "nodemon": "^3.1.9"
+  }
+}
