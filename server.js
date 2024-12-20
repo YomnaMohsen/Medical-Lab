@@ -1,6 +1,6 @@
 import express from 'express';
 import 'dotenv/config';
-// import router from './routes/index.js';
+import adminroutes from './routes/adminroutes.js';
 
 //app config
 const app = express();
@@ -14,5 +14,7 @@ app.use(express.json());
 app.get('/', (req, res) => {
     res.send("Server is running");
 });
+
+app.use('/api/admin', adminroutes);
 
 app.listen(port, () => console.log(`Server listening on port ${port}`));

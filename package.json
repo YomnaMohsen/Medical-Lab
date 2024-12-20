@@ -1,15 +1,17 @@
 {
+  "type": "module",
   "name": "medical-lab",
   "version": "1.0.0",
   "description": "medical investigation-lab website",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "author": "Yomna Mohsen",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "crypto": "^1.0.1",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
