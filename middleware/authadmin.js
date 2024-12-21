@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 // admin auth middleware
 const authAdmin = async (req, res, next) => {
     try {
-        const { atoken } = req.headers.Authorization;
+        const atoken = req.headers.authorization;
         if (!atoken) {
             res.status(401).json({ success: false, message: "Not Authorized Login Again" });
         }
@@ -16,7 +16,7 @@ const authAdmin = async (req, res, next) => {
         }
     }
     catch (error) {
-        res.status(401).json({ success: false, message: "Not Authorized Login Again" });
+        res.status(401).json({ success: false, message: error.message });
     }
 }
 

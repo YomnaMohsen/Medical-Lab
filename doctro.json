@@ -1,0 +1,14 @@
+{
+    "name": "Ahmed",
+    "username": "Ahmed_Doc",
+    "password": "ahmed@@123",
+    "contact": {
+        "mobile": "0108999999",
+        "email": "ahmed @yahoo.com"
+    }
+}
+
+{
+    "email": "admin@medlab.com",
+    "password": "qwerty321"
+}
