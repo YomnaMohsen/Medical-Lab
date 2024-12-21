@@ -1,14 +1,13 @@
 import mongoose from "mongoose";
 
-const MONGO_URI = 'mongodb://localhost:5000/medicalLabDB';
-
-mongoose.connect(MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
-    .then(() => {
+const connectDb = async () => {
+    try {
+        await mongoose.connect(process.env.MONGO_URI);
         console.log('Connected to MongoDB');
-    })
-    .catch((error) => {
+    }
+
+    catch (error) {
         console.error('Error connecting to MongoDB:', error);
-    });
+    }
+}
+export default connectDb;

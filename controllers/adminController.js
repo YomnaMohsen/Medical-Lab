@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken'
 import passwordUtils from '../utils/passwordUtils.js';
 import doctorModel from '../models/Doctor.js';
+import formatValidationErrors from '../utils/Customerror.js';
 // requires login
 // admin login API
 
@@ -29,29 +30,35 @@ class adminController {
     // need authorization
     static async addDoctor(req, res) {
         try {
-            const { name, username, password, contact } = req.body;
-            if (!name || !username || !password || !contact) {
-                res.status(400).json({ error: "Invalid or missing contact details." });
-                // check email validation
-                // check password length
-            }
-            const hashed_password = passwordUtils.gen_password(password);
+            const { name, username, password, mobileNumber, email } = req.body;
+            // check email validation
+            // check password length
+            // }
+            const hashed_password = await passwordUtils.gen_password(password);
             const newDoctor = new doctorModel({
                 name,
                 username,
                 password: hashed_password,
-                mobile: contact.mobileNumber,
-                email: contact.email
+                mobileNumber,
+                email
             });
             await newDoctor.save();
             res.status(201).json({ message: "Doctor added successfully" });
         }
-        catch (error) {
+        catch (err) {
+            if (err.name === "ValidationError") {
+                const errors = formatValidationErrors(err);
+                res.status(400).json({
+                    messages: errors,
+                });
 
+            }
+            else {
+                res.status(500).json({
+                    message: "Internal Server Error",
+                });
+            }
         }
-
     }
-
 }
-
 export default adminController;
