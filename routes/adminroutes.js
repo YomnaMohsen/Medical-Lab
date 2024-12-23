@@ -7,5 +7,6 @@ const adminRouter = express.Router();
 
 adminRouter.post("/login", adminController.adminLogin);
 adminRouter.post("/addDoctor", authAdmin, adminController.addDoctor);
+adminRouter.post("/addPatient", authAdmin, adminController.addPatient);
 
 export default adminRouter;

@@ -20,7 +20,7 @@ const PatientSchema = new Schema({
         minlength: [8, "Password must be at least 8 characters long"],
         select: false, // Prevent the password from being returned in queries
     },
-    Insurance: {
+    insurance: {
         type: String,
         required: false
     },
@@ -32,21 +32,27 @@ const PatientSchema = new Schema({
     dateOfBirth: {
         type: Date,
         required: [true, "Date of birth is required"],
+        validate: {
+            validator: function (value) {
+                return value <= new Date(); // Ensure the date is not in the future
+            },
+            message: 'Date of Birth cannot be in the future',
+        }
+
     },
-    contact: {
-        mobileNumber: {
-            type: String,
-            required: [true, "Mobile number is required"],
-            match: [/^\+?[1-9]\d{1,14}$/, "Invalid mobile number format"],
-        },
-        email: {
-            type: String,
-            required: [true, "Email is required"],
-            unique: true,
-            match: [/\S+@\S+\.\S+/, "Invalid email address"],
-        },
-    }
+
+    mobileNumber: {
+        type: String,
+        required: [true, "Mobile number is required"],
+        match: [/^\+?[0-9]\d{1,14}$/, "Invalid mobile number format"],
+    },
+    email: {
+        type: String,
+        required: [true, "Email is required"],
+        unique: true,
+        match: [/\S+@\S+\.\S+/, "Invalid email address"],
+    },
 });
 
-const patientmodel = mongoose.model("Patient", PatientSchema);
-export default patientmodel; 
+const patientModel = mongoose.model("Patient", PatientSchema);
+export default patientModel; 
