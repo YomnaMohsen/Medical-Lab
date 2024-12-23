@@ -1,0 +1,88 @@
+{
+    "name": "Ahmed",
+    "username": "Ahmed_Doc",
+    "password": "ahmed@@123",
+    "contact": {
+        "mobile": "0108999999",
+        "email": "ahmed @yahoo.com"
+    }
+}
+
+{
+    "email": "admin@medlab.com",
+    "password": "qwerty321"
+}
+
+ name: {
+    "Yomna"
+],
+        trim: true
+},
+    username: {
+"Yoman@5"
+],
+        unique: true
+},
+    password: {
+        type: String,
+        required: [
+true,
+"Password is required"
+],
+        minlength: [
+8,
+"Password must be at least 8 characters long"
+],
+        select: false, // Prevent the password from being returned in queries
+},
+    Insurance: {
+        type: String,
+        required: false
+},
+    gender: {
+        type: String,
+        enum: [
+"Male",
+"Female"
+],
+        required: [
+true,
+"Gender is required"
+],
+},
+    dateOfBirth: {
+        type: Date,
+        required: [
+true,
+"Date of birth is required"
+],
+},
+    contact: {
+        mobileNumber: {
+            type: String,
+            required: [
+    true,
+    "Mobile number is required"
+],
+            match: [/^\+?[
+        1-9
+    ]\d{
+        1,
+        14
+    }$/,
+    "Invalid mobile number format"
+],
+},
+        email: {
+            type: String,
+            required: [
+    true,
+    "Email is required"
+],
+            unique: true,
+            match: [/\S+@\S+\.\S+/,
+    "Invalid email address"
+],
+},
+}
+});

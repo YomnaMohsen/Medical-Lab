@@ -23,13 +23,14 @@ const DoctorSchema = new Schema({
     mobileNumber: {
         type: String,
         required: [true, "Mobile number is required"],
-        //  match: [/^\+?[1-9]\d{1,14}$/, "Invalid mobile number format"],
+        unique: true,
+        match: [/^\+?[0-9]\d{1,14}$/, "Invalid mobile number format"],
     },
     email: {
         type: String,
         required: [true, "Email is required"],
         unique: true,
-        //  match: [/\S+@\S+\.\S+/, "Invalid email address"],
+        match: [/\S+@\S+\.\S+/, "Invalid email address"],
     }
 });
 const doctorModel = mongoose.model("Doctor", DoctorSchema);

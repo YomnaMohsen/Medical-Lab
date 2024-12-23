@@ -27,13 +27,18 @@ class adminController {
         }
     }
     // addDoctror api
-    // need authorization
+    // need auth, protected 
     static async addDoctor(req, res) {
         try {
             const { name, username, password, mobileNumber, email } = req.body;
-            // check email validation
-            // check password length
-            // }
+            if (!name || !username || !password || !mobileNumber || !email) {
+                res.status(400).json({ message: "One or more fields are missing" });
+            }
+            if (password.length < 8) {
+                res.status(400).json({
+                    message: "Password must be > 8 charcters"
+                });
+            }
             const hashed_password = await passwordUtils.gen_password(password);
             const newDoctor = new doctorModel({
                 name,
@@ -48,17 +53,20 @@ class adminController {
         catch (err) {
             if (err.name === "ValidationError") {
                 const errors = formatValidationErrors(err);
-                res.status(400).json({
-                    messages: errors,
-                });
+                res.status(400).json({ message: errors });
+            }
+            else if (err.code === 11000) {
 
+                res.status(400).json({ message: "Value already exists", error: err.keyValue });
             }
             else {
-                res.status(500).json({
-                    message: "Internal Server Error",
-                });
+                res.status(400).json({ message: err.message });
             }
         }
+
+        /* static async addPatient(req, res) {
+     
+         }*/
     }
 }
 export default adminController;
