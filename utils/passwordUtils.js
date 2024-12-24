@@ -7,5 +7,11 @@ class passwordUtils {
         const hashedpassword = await bcrypt.hash(password, salt);
         return hashedpassword;
     }
+
+    static async compare_password(password, hashed_password) {
+        // compare passwords
+        const result = await bcrypt.compare(password, hashed_password);
+        return result;
+    }
 }
 export default passwordUtils;

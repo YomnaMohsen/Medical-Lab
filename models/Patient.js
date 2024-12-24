@@ -44,7 +44,8 @@ const PatientSchema = new Schema({
     mobileNumber: {
         type: String,
         required: [true, "Mobile number is required"],
-        match: [/^\+?[0-9]\d{1,14}$/, "Invalid mobile number format"],
+        unique: true,
+        match: [/^0\+?[1-9]\d{1,14}$/, "Invalid mobile number format"],
     },
     email: {
         type: String,

@@ -24,7 +24,7 @@ class adminController {
         }
         catch (error) {
             console.log(error);
-            return res.status(500).json({ meassage: error.meassage });
+            return res.status(500).json({ message: error.meassage });
         }
     }
     // addDoctror api
@@ -32,15 +32,16 @@ class adminController {
     static async addDoctor(req, res) {
         try {
             const { name, username, password, mobileNumber, email } = req.body;
-            if (!name || !username || !password || !mobileNumber || !email) {
-                return res.status(400).json({ message: "One or more fields are missing" });
+
+            if (password) {
+                if (password.length < 8) {
+                    return res.status(400).json({
+                        message: "Password must be greater than or equal 8 charcters"
+                    });
+                }
+                var hashed_password = await passwordUtils.gen_password(password);
+                console.log("before", hashed_password);
             }
-            if (password.length < 8) {
-                return res.status(400).json({
-                    message: "Password must be > 8 charcters"
-                });
-            }
-            const hashed_password = await passwordUtils.gen_password(password);
             const newDoctor = new doctorModel({
                 name,
                 username,
@@ -48,6 +49,7 @@ class adminController {
                 mobileNumber,
                 email
             });
+            console.log("after", hashed_password)
             await newDoctor.save();
             return res.status(201).json({ message: "Doctor added successfully" });
         }
@@ -73,27 +75,41 @@ class adminController {
             /* if (!name || !username || !password || !mobileNumber || !email) {
                  res.status(400).json({ message: "One or more fields are missing" });
              }*/
-            if (password.length < 8) {
-                res.status(400).json({
-                    message: "Password must be > 8 charcters"
-                });
+            const parsedDate = new Date(dateOfBirth);
+            if (password) {
+                if (password.length < 8) {
+                    return res.status(400).json({
+                        message: "Password must be greater than or equal 8 charcters"
+                    });
+                }
+                var hashed_password = await passwordUtils.gen_password(password);
             }
-            const hashed_password = await passwordUtils.gen_password(password);
+
             const newPatient = new patientModel({
                 name,
                 username,
                 password: hashed_password,
                 insurance,
                 gender,
-                dateOfBirth,
+                dateOfBirth: parsedDate,
                 mobileNumber,
                 email
             });
             await newPatient.save();
-            res.status(201).json({ message: "Patient added successfully" });
+            return res.status(201).json({ message: "Patient added successfully" });
         }
         catch (err) {
-            res.status(400).json({ message: err.message });
+            if (err.name === "ValidationError") {
+                const errors = formatValidationErrors(err);
+                return res.status(400).json({ message: errors });
+            }
+            else if (err.code === 11000) {
+
+                return res.status(400).json({ message: "Value already exists", error: err.keyValue });
+            }
+            else {
+                return res.status(400).json({ message: err.message });
+            }
         }
     }
 
