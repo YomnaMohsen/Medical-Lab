@@ -3,6 +3,8 @@ import doctor from '../models/Doctor.js';
 import patient from '../models/Patient.js';
 import passwordUtils from '../utils/passwordUtils.js';
 
+
+// user (patient or doctor) auth-controller
 class authController {
     static async Doclogin(req, res) {
         try {
