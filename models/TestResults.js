@@ -22,7 +22,7 @@ const testItemSchema = new mongoose.Schema({
 
 // Define the schema for the overall test result
 const testResultSchema = new mongoose.Schema({
-    patient: {
+    patientId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Patient", // Reference to the patient
         required: true,
@@ -36,6 +36,11 @@ const testResultSchema = new mongoose.Schema({
         type: Date,
         default: Date.now, // When the test was conducted
     },
+    createdby: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Doctor", // Reference to the patient
+        required: true,
+    },
 });
-
-export default mongoose.model("TestResult", testResultSchema);;
+const testResults = mongoose.model("TestResult", testResultSchema);
+export default testResults;

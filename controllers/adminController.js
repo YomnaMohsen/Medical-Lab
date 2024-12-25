@@ -50,8 +50,8 @@ class adminController {
                 email
             });
             console.log("after", hashed_password)
-            await newDoctor.save();
-            return res.status(201).json({ message: "Doctor added successfully" });
+            const savedDoctor = await newDoctor.save();
+            return res.status(201).json({ message: "Doctor added successfully", newDoctor: savedDoctor });
         }
         catch (err) {
             if (err.name === "ValidationError") {
@@ -95,8 +95,8 @@ class adminController {
                 mobileNumber,
                 email
             });
-            await newPatient.save();
-            return res.status(201).json({ message: "Patient added successfully" });
+            const savedPatient = await newPatient.save();
+            return res.status(201).json({ message: "Patient added successfully", newPatient: savedPatient });
         }
         catch (err) {
             if (err.name === "ValidationError") {

@@ -14,8 +14,19 @@ const authUser = async (req, res, next) => {
         }
     }
     catch (error) {
-        res.status(401).json({ success: false, message: error.message });
+        return res.status(401).json({ success: false, message: error.message });
     }
 }
 
-export default authUser;
+const alloweduser = (userModel) => {
+    return async (req, res, next) => {
+        const currentuser = await userModel.findById(req.user.id);
+        if (!currentuser) {
+            return res.status(403).json({ message: "Forbidden" });
+        }
+        next();
+    };
+
+}
+
+export default { authUser, alloweduser };

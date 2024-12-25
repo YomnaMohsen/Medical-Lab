@@ -11,9 +11,10 @@ userRouter.post("/login/doctor", authController.Patlogin);
 
 // doctor protected routes
 userRouter.post("/doctor/addtest", authUser, userController.addTest);
-userRouter.post("/doctor/deletetest", authUser, userController.deleteTest);
-userRouter.post("/doctor/edittest", authUser, userController.editTest);
-userRouter.post("/doctor/viewtest".authUser, userController.viewTest);// needs id
+userRouter.get("/doctor/gettest/:id", authUser, userController.getTest);
+userRouter.patch("/doctor/updatetest/:id", authUser, userController.updateTest);
+userRouter.delete("/doctor/deletetest/:id", authUser, userController.deleteTest);
+
 
 
 // patient protected routes
