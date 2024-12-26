@@ -73,8 +73,8 @@ class userController {
             return res.status(400).json({ error: "Invalid ID format" });
         }
         try {
-            const deletededResult = await testResults.findByIdAndDelete(req.params.id);
-            if (!deletdedResult) {
+            const deletedResult = await testResults.findByIdAndDelete(req.params.id);
+            if (!deletedResult) {
                 return res.status(404).json({ error: "Test result not found" });
             }
             return res.status(200).json({ message: "Test Result deleted successfully" });
@@ -82,8 +82,52 @@ class userController {
         catch (err) {
             return res.status(500).json({ message: err.message });
         }
+    }
+    // get all tests by certain doctor
+    static async getTestsbyDoctor(req, res) {
+        const { doctorid } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(doctorid)) {
+            return res.status(400).json({ error: "Invalid ID format" });
+        }
+
+        try {
+            const testResults = await testResults.find({ createdby: doctorid }).populate("patient", "name email");
+            if (testResults.length === 0) {
+                return res.status(404).json({ message: "No test results found for this doctor" });
+            }
+
+            res.status(200).json({
+                message: "Test results retrieved successfully",
+                testResults,
+            });
+        }
+        catch (err) {
+            return res.status(500).json({ message: err.message });
+        }
 
     }
+    // get all tests of certain patient made by certain doctor
+    static async AllPatientTestsbyDoctor(req, res) {
+        const { patientid, doctorid } = req.params;
+        try {
+            const testResults = await testResults.find({
+                patient: patientid,
+                createdby: doctorid
+            }).populate("patient", "name email").populate("createdBy", "name email");
+            if (testResults.length === 0) {
+                return res.status(404).json({ message: "No test results found for this doctor" });
+            }
+
+            res.status(200).json({
+                message: "Test results retrieved successfully",
+                testResults,
+            });
+        }
+        catch (err) {
+            return res.status(500).json({ message: err.message });
+        }
+    }
+
 }
 
 export default userController;

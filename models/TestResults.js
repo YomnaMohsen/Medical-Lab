@@ -22,7 +22,7 @@ const testItemSchema = new mongoose.Schema({
 
 // Define the schema for the overall test result
 const testResultSchema = new mongoose.Schema({
-    patientId: {
+    patient: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Patient", // Reference to the patient
         required: true,

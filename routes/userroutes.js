@@ -14,14 +14,17 @@ userRouter.post("/doctor/addtest", authUser, userController.addTest);
 userRouter.get("/doctor/gettest/:id", authUser, userController.getTest);
 userRouter.patch("/doctor/updatetest/:id", authUser, userController.updateTest);
 userRouter.delete("/doctor/deletetest/:id", authUser, userController.deleteTest);
+userRouter.get("/doctor/gettests/:doctorid", authUser, userController.getTestsbyDoctor);
+userRouter.get("/doctor/gettests/:patientid/:doctorid", authUser, userController.AllPatientTestsbyDoctor);
+
 
 
 
 // patient protected routes
-userRouter.post("/patient/addtest", authUser, userController);
-userRouter.post("/patient/deletetest", authUser, userController);
-userRouter.post("/patient/edittest", authUser, userController);
-userRouter.post("/patient/viewtest".authUser, userController);// needs id
+userRouter.get("/patient/gettest/:testid", authUser, userController.getPatientTest);
+userRouter.get("/patient/getAlltests/:patientid", authUser, userController.AllTestsbyPatient);
+userRouter.post("/patient/bookvisit", authUser, userController.bookVisit);
+//userRouter.post("/patient/viewtest".authUser, userController);// needs id
 
 
 
