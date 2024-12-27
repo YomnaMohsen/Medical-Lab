@@ -55,5 +55,23 @@ const PatientSchema = new Schema({
     },
 });
 
+// Add a virtual field for age
+PatientSchema.virtual("age").get(function () {
+    if (!this.dateOfBirth) return null;
+    const today = new Date();
+    const birthDate = new Date(this.dateOfBirth);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    // Adjust age if the birthday has not occurred this year
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
+});
+
+// Ensure virtual fields are included when converting to JSON or Object
+PatientSchema.set("toJSON", { virtuals: true });
+PatientSchema.set('toObject', { virtuals: true });
 const patientModel = mongoose.model("Patient", PatientSchema);
 export default patientModel; 

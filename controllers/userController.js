@@ -2,6 +2,7 @@ import doctorModel from '../models/Doctor.js';
 import patientModel from '../models/Patient.js';
 import testResults from '../models/TestResults.js';
 class userController {
+    // add test result by certain doctor for certain patient
     static async addTest(req, res) {
         try {
             const { patientId, doctorId, title, items, createdby } = req.body;
@@ -27,7 +28,7 @@ class userController {
         }
 
     }
-
+    // get test result by id
     static async getTest(req, res) {
 
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -47,6 +48,7 @@ class userController {
         }
 
     }
+    // update test by id
     static async updateTest(req, res) {
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
             return res.status(400).json({ error: "Invalid ID format" });
@@ -67,7 +69,7 @@ class userController {
         }
 
     }
-
+    // delete test by id
     static async deleteTest(req, res) {
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
             return res.status(400).json({ error: "Invalid ID format" });
@@ -127,6 +129,31 @@ class userController {
             return res.status(500).json({ message: err.message });
         }
     }
+    // patient gets certain test result 
+    static async getPatientTest(req, res) {
+        const { patientid, testid } = req.params;
+        try {
+            const testResults = await testResults.findOne({
+                _id: testid,
+                patient: patientid
+            }).populate({
+                path: "patient",
+                select: "name gender age", // Include age and other desired fields
+            });
+            if (testResults.length === 0) {
+                return res.status(404).json({ message: "No test results found for this doctor" });
+            }
+
+            res.status(200).json({
+                message: "Test results retrieved successfully",
+                testResults,
+            });
+        }
+        catch (err) {
+            return res.status(500).json({ message: err.message });
+        }
+    }
+
 
 }
 
