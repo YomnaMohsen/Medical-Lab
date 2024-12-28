@@ -1,6 +1,7 @@
 import doctorModel from '../models/Doctor.js';
 import patientModel from '../models/Patient.js';
 import testResults from '../models/TestResults.js';
+import homeVisitModel from '../models/HomeVisit.js';
 class userController {
     // add test result by certain doctor for certain patient
     static async addTest(req, res) {
@@ -153,8 +154,24 @@ class userController {
             return res.status(500).json({ message: err.message });
         }
     }
-
+    static async bookVisit(req, res) {
+        const { patientId, address } = req.body;
+        if (!patientId || !address) {
+            return res.status(400).json({ message: "Missing required fields" });
+        }
+        const homeVisit = new homeVisitModel({
+            patient: patientId,
+            address
+        });
+        await homeVisit.save();
+        res.status(201).json({
+            message: "Home visit booked successfully"
+        });
+    } catch(err) {
+        res.status(500).json({ error: "Server error: " + err.message });
+    }
 
 }
+
 
 export default userController;
