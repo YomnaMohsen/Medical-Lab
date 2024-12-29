@@ -154,6 +154,7 @@ class userController {
             return res.status(500).json({ message: err.message });
         }
     }
+    // patient books home visit
     static async bookVisit(req, res) {
         const { patientId, address } = req.body;
         if (!patientId || !address) {
@@ -162,14 +163,15 @@ class userController {
         const homeVisit = new homeVisitModel({
             patient: patientId,
             address
-        });
+        }).populate("patient", "name email")
         await homeVisit.save();
         res.status(201).json({
-            message: "Home visit booked successfully"
+            message: "Home visit booked successfully", Visit_details: homeVisit
         });
     } catch(err) {
         res.status(500).json({ error: "Server error: " + err.message });
     }
+
 
 }
 
