@@ -24,6 +24,7 @@ const PatientSchema = new Schema({
         minlength: [8, "Password must be at least 8 characters long"],
         select: false, // Prevent the password from being returned in queries
     },
+    passwordChangedAt: Date,
     insurance: {
         type: String,
         required: false

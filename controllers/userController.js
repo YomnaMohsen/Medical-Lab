@@ -1,5 +1,4 @@
-import doctorModel from '../models/Doctor.js';
-import patientModel from '../models/Patient.js';
+import passwordUtils from '../utils/passwordUtils.js';
 import testResults from '../models/TestResults.js';
 import homeVisitModel from '../models/HomeVisit.js';
 class userController {
@@ -8,18 +7,20 @@ class userController {
         return async (req, res) => {
             const userId = req.params.id;
             try {
-                const updatedpassword = await Model.findByIdAndUpdate(
+                const updateddocument = await Model.findByIdAndUpdate(
                     userId,
                     {
-                        password: await bcrypt.hash(req.body.password, 12)
+                        password: await passwordUtils.gen_password(req.body.password),
+                        passwordChangedAt: Date.now();
                     },
                     { new: true }
                 );
+                return res.status(200).json({ data: updateddocument });
             }
+            catch (error) {
 
+            }
         }
-
-
     }
     // add test result by certain doctor for certain patient
     static async addTest(req, res) {
@@ -148,6 +149,8 @@ class userController {
             return res.status(500).json({ message: err.message });
         }
     }
+    ///////////////////////////////////////////////////////////////////////////////////
+    //***Patient Controller ******
     // patient gets certain test result 
     static async getPatientTest(req, res) {
         const { patientid, testid } = req.params;
@@ -189,8 +192,6 @@ class userController {
     } catch(err) {
         res.status(500).json({ error: "Server error: " + err.message });
     }
-
-
 }
 
 
