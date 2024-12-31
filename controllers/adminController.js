@@ -7,7 +7,7 @@ import formatValidationErrors from '../utils/Customerror.js';
 // admin login API
 
 class adminController {
-    // addDoctror api
+
     // need auth, protected 
     static async addDoctor(req, res) {
         try {
@@ -46,7 +46,56 @@ class adminController {
                 return res.status(400).json({ message: err.message });
             }
         }
+    }
+    // get doctor by id
+    static async getDoctor(req, res) {
+        const { id } = req.params;
+        try {
+            const doctor = await doctorModel.findById(req.params.id);
+            if (!doctor) {
+                return res.status(404).json({
+                    error: `No doctor with this id ${id}`
+                });
+            }
+            return res.status(200).json({ doctor });
+        }
+        catch (err) {
+            return res.status(500).json({ message: err.message });
+        }
+    }
+    // update doctor
+    static async updateDoctor(req, res) {
+        try {
+            const updateddoctor = await doctorModel.findByIdAndUpdate(
+                req.params.id,
+                req.body,
+                { new: true }
+            );
+            if (!updateddoctor) {
+                return res.status(404).json({ error: "Doctor not found" });
+            }
+            return res.status(200).json({ message: "Doctor data updated successfully", updatedResult });
+        }
+        catch (err) {
+            return res.status(500).json({ message: err.message });
+        }
+    }
 
+    // delete doctor 
+    static async deleteDoctor(req, res) {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return res.status(400).json({ error: "Invalid ID format" });
+        }
+        try {
+            const deletedDoctor = await doctorModel.findByIdAndDelete(req.params.id);
+            if (!deletedDoctor) {
+                return res.status(404).json({ error: "Doctor not found" });
+            }
+            return res.status(200).json({ message: "Doctor deleted successfully" });
+        }
+        catch (err) {
+            return res.status(500).json({ message: err.message });
+        }
     }
 
     static async addPatient(req, res) {

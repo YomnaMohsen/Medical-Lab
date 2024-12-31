@@ -6,8 +6,26 @@ import authAdmin from '../middleware/authadmin.js';
 
 const adminRouter = express.Router();
 
-adminRouter.post("/login/admin", authController.adminLogin);
-adminRouter.post("/admin/addDoctor", authAdmin, adminController.addDoctor);
-adminRouter.post("/admin/addPatient", authAdmin, adminController.addPatient);
+adminRouter.post("/login", authController.adminLogin);
+// doctor operations
+// add doctor
+adminRouter.post("/doctor", authAdmin, adminController.addDoctor);
+// get doctor by id
+adminRouter.get("/doctor/:id", authAdmin, adminController.getDoctor);
+// update doctor
+adminRouter.patch("/doctor/:id", authAdmin, adminController.updateDoctor);
+// delete doctor by 
+adminRouter.delete("/doctor/:id", authAdmin, adminController.deleteDoctor);
+
+///////////////////////////////////////////////////////////////////////
+// patient operations
+//add patient
+adminRouter.post("/patient", authAdmin, adminController.addPatient);
+//get patient by id
+adminRouter.get("/patient/:id", authAdmin, adminController.getPatient);
+//update patient
+adminRouter.patch("/patient/:id", authAdmin, adminController.updatePatient);
+//delete patient
+adminRouter.get("/patient/:id", authAdmin, adminController.deletePatient);
 
 export default adminRouter;

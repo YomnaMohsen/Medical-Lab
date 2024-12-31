@@ -9,6 +9,10 @@ const PatientSchema = new Schema({
         required: [true, "name is required"],
         trim: true
     },
+    file: {
+        name: { type: String },
+        url: { type: String }
+    },
     username: {
         type: String,
         required: [true, "username is required"],

@@ -3,6 +3,24 @@ import patientModel from '../models/Patient.js';
 import testResults from '../models/TestResults.js';
 import homeVisitModel from '../models/HomeVisit.js';
 class userController {
+    // user updates its password
+    static updatePassword(Model) {
+        return async (req, res) => {
+            const userId = req.params.id;
+            try {
+                const updatedpassword = await Model.findByIdAndUpdate(
+                    userId,
+                    {
+                        password: await bcrypt.hash(req.body.password, 12)
+                    },
+                    { new: true }
+                );
+            }
+
+        }
+
+
+    }
     // add test result by certain doctor for certain patient
     static async addTest(req, res) {
         try {

@@ -8,16 +8,18 @@ import { authUser, alloweduser } from '../middleware/auth.js';
 
 const userRouter = express.Router();
 
-userRouter.post("/login/patient", authController.Doclogin);
-userRouter.post("/login/doctor", authController.Patlogin);
+userRouter.post("/patient/login", authController.Patlogin);
+userRouter.post("/doctor/login", authController.Doclogin);
 
 // doctor protected routes
-userRouter.post("/user/doctor/addtest", authUser, alloweduser(doctorModel), userController.addTest);
-userRouter.get("/user/doctor/gettest/:id", authUser, alloweduser(doctorModel), userController.getTest);
-userRouter.patch("/user/doctor/updatetest/:id", authUser, alloweduser(doctorModel), userController.updateTest);
-userRouter.delete("/user/doctor/deletetest/:id", authUser, alloweduser(doctorModel), userController.deleteTest);
-userRouter.get("/user/doctor/gettests/:doctorid", authUser, alloweduser(doctorModel), userController.getTestsbyDoctor);
-userRouter.get("/user/doctor/gettests/:patientid/:doctorid", authUser, alloweduser(doctorModel), userController.AllPatientTestsbyDoctor);
+userRouter.patch("/doctor/updatePassword", authUser, alloweduser(doctorModel), userController.updatePassword(doctorModel));
+userRouter.post("/doctor/test", authUser, alloweduser(doctorModel), userController.addTest);
+userRouter.get("/doctor/test/:id", authUser, alloweduser(doctorModel), userController.getTest);
+userRouter.patch("/doctor/test/:id", authUser, alloweduser(doctorModel), userController.updateTest);
+userRouter.delete("/doctor/test/:id", authUser, alloweduser(doctorModel), userController.deleteTest);
+userRouter.get("/doctor/tests/:doctorid", authUser, alloweduser(doctorModel), userController.getTestsbyDoctor);
+userRouter.get("/doctor/Alltests/:patientid/:doctorid", authUser, alloweduser(doctorModel), userController.AllPatientTestsbyDoctor);
+
 
 
 
@@ -25,10 +27,11 @@ userRouter.get("/user/doctor/gettests/:patientid/:doctorid", authUser, allowedus
 // patient protected routes
 /////////////////////////////////
 // patient gets certain test result
-userRouter.get("/user/patient/gettest/:patientid/:testid", authUser, alloweduser(patientModel), userController.getPatientTest);
-userRouter.get("/user/patient/getAlltests/:patientid", authUser, alloweduser(patientModel), userController.AllTestsbyPatient);
-userRouter.post("/user/patient/appointment", authUser, alloweduser(patientModel), userController.bookVisit);
-userRouter.post("/user/patient/getAllappointments/patientid", authUser, alloweduser(patientModel), userController.getAllVisits);
+userRouter.patch("/patient/updatePassword", authUser, alloweduser(patientModel), userController.updatePassword(patientModel));
+userRouter.get("/patient/test/:patientid/:testid", authUser, alloweduser(patientModel), userController.getPatientTest);
+userRouter.get("/patient/Alltests/:patientid", authUser, alloweduser(patientModel), userController.AllTestsbyPatient);
+userRouter.post("/patient/appointment", authUser, alloweduser(patientModel), userController.bookVisit);
+userRouter.get("/patient/Allappointments/patientid", authUser, alloweduser(patientModel), userController.getAllVisits);
 
 
 

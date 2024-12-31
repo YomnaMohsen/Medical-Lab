@@ -1,6 +1,7 @@
 import express from 'express';
 import 'dotenv/config';
 import adminroutes from './routes/adminroutes.js';
+import userroutes from './routes/userroutes.js';
 import connectDb from './config/db.js';
 
 //app config
@@ -19,5 +20,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/admin', adminroutes);
+app.use('/api/user', userroutes);
+
 
 app.listen(port, () => console.log(`Server listening on port ${port}`));
