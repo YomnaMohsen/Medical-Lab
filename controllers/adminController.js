@@ -97,7 +97,9 @@ class adminController {
             return res.status(500).json({ message: err.message });
         }
     }
-
+    // patient operations
+    ///////////////////////////////////////////////////
+    // add patient 
     static async addPatient(req, res) {
         try {
             const { name, username, password, insurance, gender, dateOfBirth, mobileNumber, email } = req.body;
@@ -139,6 +141,40 @@ class adminController {
             else {
                 return res.status(400).json({ message: err.message });
             }
+        }
+    }
+
+    // get patient by id
+    static async getPatient(req, res) {
+        const { id } = req.params;
+        try {
+            const patient = await patientModel.findById(req.params.id);
+            if (!patient) {
+                return res.status(404).json({
+                    error: `No patient with this id ${id}`
+                });
+            }
+            return res.status(200).json({ patient });
+        }
+        catch (err) {
+            return res.status(500).json({ message: err.message });
+        }
+    }
+    // update patient
+    static async updatePatient(req, res) {
+        try {
+            const updatedpatient = await patientModel.findByIdAndUpdate(
+                req.params.id,
+                req.body,
+                { new: true }
+            );
+            if (!updatedpatient) {
+                return res.status(404).json({ error: "Patient not found" });
+            }
+            return res.status(200).json({ message: "Patient data updated successfully", updatedResult });
+        }
+        catch (err) {
+            return res.status(500).json({ message: err.message });
         }
     }
 

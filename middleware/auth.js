@@ -30,4 +30,4 @@ const alloweduser = (userModel) => {
     };
 }
 
-export default { authUser, alloweduser };
+export { authUser, alloweduser };
