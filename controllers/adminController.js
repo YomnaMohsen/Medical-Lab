@@ -74,7 +74,7 @@ class adminController {
             if (!updateddoctor) {
                 return res.status(404).json({ error: "Doctor not found" });
             }
-            return res.status(200).json({ message: "Doctor data updated successfully", updatedResult });
+            return res.status(200).json({ message: "Doctor data updated successfully", updateddoctor });
         }
         catch (err) {
             return res.status(500).json({ message: err.message });
@@ -171,7 +171,24 @@ class adminController {
             if (!updatedpatient) {
                 return res.status(404).json({ error: "Patient not found" });
             }
-            return res.status(200).json({ message: "Patient data updated successfully", updatedResult });
+            return res.status(200).json({ message: "Patient data updated successfully", updatedpatient });
+        }
+        catch (err) {
+            return res.status(500).json({ message: err.message });
+        }
+    }
+
+    // delete patient 
+    static async deleteDoctor(req, res) {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return res.status(400).json({ error: "Invalid ID format" });
+        }
+        try {
+            const deletedPatient = await patientModel.findByIdAndDelete(req.params.id);
+            if (!deletedPatient) {
+                return res.status(404).json({ error: "Patient not found" });
+            }
+            return res.status(200).json({ message: "Doctor deleted successfully" });
         }
         catch (err) {
             return res.status(500).json({ message: err.message });
