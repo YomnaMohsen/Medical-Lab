@@ -20,7 +20,7 @@ class adminController {
                     });
                 }
                 var hashed_password = await passwordUtils.gen_password(password);
-                console.log("before", hashed_password);
+
             }
             const newDoctor = new doctorModel({
                 name,
@@ -29,9 +29,10 @@ class adminController {
                 mobileNumber,
                 email
             });
-            console.log("after", hashed_password)
+
             const savedDoctor = await newDoctor.save();
-            return res.status(201).json({ message: "Doctor added successfully", newDoctor: savedDoctor });
+            const user = await doctorModel.findById(savedDoctor.id).select('-password');
+            return res.status(201).json({ message: "Doctor added successfully", newDoctor: user });
         }
         catch (err) {
             if (err.name === "ValidationError") {
