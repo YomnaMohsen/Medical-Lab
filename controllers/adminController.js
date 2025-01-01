@@ -179,7 +179,7 @@ class adminController {
     }
 
     // delete patient 
-    static async deleteDoctor(req, res) {
+    static async deletePatient(req, res) {
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
             return res.status(400).json({ error: "Invalid ID format" });
         }
@@ -188,7 +188,7 @@ class adminController {
             if (!deletedPatient) {
                 return res.status(404).json({ error: "Patient not found" });
             }
-            return res.status(200).json({ message: "Doctor deleted successfully" });
+            return res.status(200).json({ message: "Patient deleted successfully" });
         }
         catch (err) {
             return res.status(500).json({ message: err.message });
