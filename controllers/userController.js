@@ -6,19 +6,36 @@ class userController {
     static updatePassword(Model) {
         return async (req, res) => {
             const userId = req.params.id;
+            const { currentPassword, newPassword } = req.body;
             try {
+                //find user by id
+                const user = Model.findById(userId);
+                // check if curretn password is correct
+                const isMatch = await passwordUtils.compare_password(currentPassword, user.password);
+                if (!isMatch) {
+                    return res.status(400).json({ message: 'Current password is incorrect' });
+                }
+
+                //check new_password with hashed one
+                const isSamePassword = await passwordUtils.compare_password(newPassword, hashedPassword);
+
+                if (isSamePassword) {
+                    return res.status(400).json({ message: 'New password cannot be the same as the current password' });
+                }
                 const updateddocument = await Model.findByIdAndUpdate(
                     userId,
                     {
                         password: await passwordUtils.gen_password(req.body.password),
-                        passwordChangedAt: Date.now();
+                        passwordChangedAt: Date.now()
                     },
                     { new: true }
                 );
-                return res.status(200).json({ data: updateddocument });
+                return res.status(200).json({ message: "Password updated successfully" });
             }
             catch (error) {
-
+                return res.status(400).json({
+                    message: error.message
+                });
             }
         }
     }
