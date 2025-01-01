@@ -34,7 +34,7 @@ userRouter.patch("/patient/updatePassword", userController.updatePassword(patien
 userRouter.get("/patient/test/:patientid/:testid", userController.getPatientTest);
 userRouter.get("/patient/Alltests/:id", userController.AllTestsbyPatient);
 userRouter.post("/patient/appointment", userController.bookVisit);
-userRouter.get("/patient/Allappointments/:id", userController.getAllVisits);
+//userRouter.get("/patient/Allappointments/:id", userController.getAllVisits);
 
 
 
