@@ -197,9 +197,28 @@ class userController {
             return res.status(500).json({ message: err.message });
         }
     }
-
+    // get all tests results for certain patient
     static async AllTestsbyPatient(req, res) {
+        const { patientid } = req.params;
+        try {
+            const testResults = await testResults.find({
+                patient: patientid
+            }).populate({
+                path: "patient",
+                select: "name gender age", // Include age and other desired fields
+            });
+            if (testResults.length === 0) {
+                return res.status(404).json({ message: "No test results found for this doctor" });
+            }
 
+            res.status(200).json({
+                message: "Test results retrieved successfully",
+                testResults,
+            });
+        }
+        catch (err) {
+            return res.status(500).json({ message: err.message });
+        }
     }
     // patient books home visit
     static async bookVisit(req, res) {
