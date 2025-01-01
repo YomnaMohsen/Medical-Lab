@@ -1,4 +1,4 @@
-import express, { application } from 'express';
+import express from 'express';
 import doctorModel from '../models/Doctor.js';
 import patientModel from '../models/Patient.js';
 import authController from '../controllers/authController.js';
@@ -12,7 +12,7 @@ userRouter.post("/patient/login", authController.Patlogin);
 userRouter.post("/doctor/login", authController.Doclogin);
 
 
-application.use(authUser, alloweduser(doctorModel));
+userRouter.use(authUser, alloweduser(doctorModel));
 // doctor protected routes
 userRouter.patch("/doctor/updatePassword", userController.updatePassword(doctorModel));
 // doctor adds test
@@ -30,18 +30,14 @@ userRouter.get("/doctor/Alltests/:patientid/:id", userController.AllPatientTests
 
 
 
-
-
 // patient protected routes
 /////////////////////////////////
-application.use(authUser, alloweduser(patientModel));
+userRouter.use(authUser, alloweduser(patientModel));
 // patient gets certain test result
 userRouter.patch("/patient/updatePassword", userController.updatePassword(patientModel));
 userRouter.get("/patient/test/:id/:testid", userController.getPatientTest);
 userRouter.get("/patient/Alltests/:id", userController.AllTestsbyPatient);
 userRouter.post("/patient/appointment", userController.bookVisit);
-//userRouter.get("/patient/Allappointments/:id", userController.getAllVisits);
-
 
 
 export default userRouter;

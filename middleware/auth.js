@@ -22,7 +22,7 @@ const alloweduser = (userModel) => {
         if (!currentuser) {
             return res.status(403).json({ message: "Forbidden" });
         }
-        if (userModel.passwordChangedAt && req.user.iat * 1000 < userModel.passwordChangedAt.getTime()) {
+        if (currentuser.passwordChangedAt && req.user.iat * 1000 < currentuser.passwordChangedAt.getTime()) {
             return res.status(401).json({ message: "user changed his password please log in again" });
         }
 
