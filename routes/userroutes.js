@@ -19,8 +19,8 @@ userRouter.post("/doctor/test", userController.addTest);
 userRouter.get("/doctor/test/:id", userController.getTest);
 userRouter.patch("/doctor/test/:id", userController.updateTest);
 userRouter.delete("/doctor/test/:id", userController.deleteTest);
-userRouter.get("/doctor/tests/:doctorid", userController.getTestsbyDoctor);
-userRouter.get("/doctor/Alltests/:patientid/:doctorid", userController.AllPatientTestsbyDoctor);
+userRouter.get("/doctor/tests/:id", userController.getTestsbyDoctor);
+userRouter.get("/doctor/Alltests/:patientid/:id", userController.AllPatientTestsbyDoctor);
 
 
 
@@ -30,11 +30,11 @@ userRouter.get("/doctor/Alltests/:patientid/:doctorid", userController.AllPatien
 /////////////////////////////////
 application.use(authUser, alloweduser(patientModel));
 // patient gets certain test result
-userRouter.patch("/patient/updatePassword", authUser, alloweduser(patientModel), userController.updatePassword(patientModel));
-userRouter.get("/patient/test/:patientid/:testid", authUser, alloweduser(patientModel), userController.getPatientTest);
-userRouter.get("/patient/Alltests/:patientid", authUser, alloweduser(patientModel), userController.AllTestsbyPatient);
-userRouter.post("/patient/appointment", authUser, alloweduser(patientModel), userController.bookVisit);
-userRouter.get("/patient/Allappointments/patientid", authUser, alloweduser(patientModel), userController.getAllVisits);
+userRouter.patch("/patient/updatePassword", userController.updatePassword(patientModel));
+userRouter.get("/patient/test/:patientid/:testid", userController.getPatientTest);
+userRouter.get("/patient/Alltests/:id", userController.AllTestsbyPatient);
+userRouter.post("/patient/appointment", userController.bookVisit);
+userRouter.get("/patient/Allappointments/:id", userController.getAllVisits);
 
 
 

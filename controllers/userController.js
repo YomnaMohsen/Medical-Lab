@@ -122,15 +122,20 @@ class userController {
             return res.status(500).json({ message: err.message });
         }
     }
-    // get all tests by certain doctor
+    // get all tests by certain doctor using pagination
     static async getTestsbyDoctor(req, res) {
         const { doctorid } = req.params;
+        const { limit, skip = 0 } = req.query;
         if (!mongoose.Types.ObjectId.isValid(doctorid)) {
             return res.status(400).json({ error: "Invalid ID format" });
         }
 
         try {
-            const testResults = await testResults.find({ createdby: doctorid }).populate("patient", "name email");
+            const testResults = await testResults.find({ createdby: doctorid })
+                .sort({ date: -1 }) //  get the newest results
+                .skip(parseInt(skip))// skip certain results based on skip value
+                .limit(parseInt(limit))// limit no of resylts returned
+                .populate("patient", "name email");
             if (testResults.length === 0) {
                 return res.status(404).json({ message: "No test results found for this doctor" });
             }
@@ -191,6 +196,10 @@ class userController {
         catch (err) {
             return res.status(500).json({ message: err.message });
         }
+    }
+
+    static async AllTestsbyPatient(req, res) {
+
     }
     // patient books home visit
     static async bookVisit(req, res) {
