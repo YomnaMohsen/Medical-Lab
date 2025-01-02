@@ -17,10 +17,10 @@ const authAdmin = async (req, res, next) => {
     }
     catch (error) {
 
-        if (error.name === 'TokenExpiredError') {
-            return { valid: false, expired: true, message: 'Token expired' };
-        }
-        return res.status(401).json({ success: false, message: error.message });
+        /* if (error.name === 'TokenExpiredError') {
+             return { valid: false, expired: true, message:  };
+         }*/
+        return res.status(401).json({ success: false, message: "Token expired" });
     }
 }
 

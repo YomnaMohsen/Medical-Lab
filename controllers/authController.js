@@ -13,7 +13,7 @@ class authController {
                 return res.status(400).json({ meassage: "You can't leave email or password empty" });
             }
             if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
-                const token = jwt.sign({ userId: process.env.ADMIN_ID + email }, process.env.JWT_SECRET, { expiresIn: '15m', });
+                const token = jwt.sign({ userId: process.env.ADMIN_ID + email }, process.env.JWT_SECRET, { expiresIn: '1h', });
                 return res.status(200).json({ message: "User login successfully", token });
             }
             else {

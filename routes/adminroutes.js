@@ -14,8 +14,10 @@ adminRouter.post("/doctor", authAdmin, adminController.addDoctor);
 adminRouter.get("/doctor/:id", authAdmin, adminController.getDoctor);
 // update doctor
 adminRouter.patch("/doctor/:id", authAdmin, adminController.updateDoctor);
-// delete doctor by 
+// delete doctor  
 adminRouter.delete("/doctor/:id", authAdmin, adminController.deleteDoctor);
+// get all doctors data
+adminRouter.get("/alldoctors", authAdmin, adminController.getAllDoctors);
 
 ///////////////////////////////////////////////////////////////////////
 // patient operations

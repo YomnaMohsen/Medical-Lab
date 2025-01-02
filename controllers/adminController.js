@@ -69,7 +69,13 @@ class adminController {
         try {
             const updateddoctor = await doctorModel.findByIdAndUpdate(
                 req.params.id,
-                req.body,
+                {
+                    name: req.body.name,
+                    username: req.body.username,
+                    mobileNumber: req.body.mobileNumber,
+                    email: req.body.email
+                },
+                { runValidators: true },
                 { new: true }
             );
             if (!updateddoctor) {
@@ -84,15 +90,32 @@ class adminController {
 
     // delete doctor 
     static async deleteDoctor(req, res) {
-        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-            return res.status(400).json({ error: "Invalid ID format" });
-        }
         try {
             const deletedDoctor = await doctorModel.findByIdAndDelete(req.params.id);
             if (!deletedDoctor) {
                 return res.status(404).json({ error: "Doctor not found" });
             }
-            return res.status(200).json({ message: "Doctor deleted successfully" });
+            return res.status(200).json({ message: "Doctor deleted successfully", deletedDoctor });
+        }
+        catch (err) {
+            return res.status(500).json({ message: err.message });
+        }
+    }
+
+    // get all doctors 
+    static async getAllDoctors(req, res) {
+        const { limit, page } = req.query;
+        const skip = (parseInt(page) - 1) * limit;
+        try {
+            const all_doctors = await doctorModel.find()
+                .skip(parseInt(skip))// skip certain results based on skip value
+                .limit(parseInt(limit))// limit no of results returned
+            if (all_doctors.length === 0) {
+                return res.status(404).json({ message: "No doctors can be reterived" });
+            }
+            const total_doctors = await doctorModel.countDocuments();
+            const totalPages = Math.ceil(total_doctors / limit);
+            return res.status(200).json({ message: `Reteriving ${all_doctors.length}`, total_pages: totalPages, current_page: page, doctors: all_doctors });
         }
         catch (err) {
             return res.status(500).json({ message: err.message });
@@ -195,6 +218,8 @@ class adminController {
             return res.status(500).json({ message: err.message });
         }
     }
+
+
 
 }
 

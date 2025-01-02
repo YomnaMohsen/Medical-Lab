@@ -1,6 +1,7 @@
 import passwordUtils from '../utils/passwordUtils.js';
 import testResults from '../models/TestResults.js';
 import homeVisitModel from '../models/HomeVisit.js';
+import mongoose from "mongoose";
 class userController {
     // user updates its password
     static updatePassword(Model) {
