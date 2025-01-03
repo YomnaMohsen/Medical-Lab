@@ -33,10 +33,9 @@ class authController {
             if (!user) {
                 return res.status(400).json({ success: false, message: "user deos not exist" });
             }
-            console.log(user.password);
             const isMatch = await passwordUtils.compare_password(password, user.password);
             if (isMatch) {
-                const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+                const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "2h" });
                 return res.status(200).json({ message: "User login successfully", token });
             }
             else {
@@ -59,7 +58,7 @@ class authController {
             }
             const isMatch = await passwordUtils.compare_password(password, user.password);
             if (isMatch) {
-                const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+                const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "2h" });
                 return res.status(200).json({ message: "User login successfully", token });
             }
             else {

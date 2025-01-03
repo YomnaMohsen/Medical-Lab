@@ -22,7 +22,7 @@ const testItemSchema = new mongoose.Schema({
 
 // Define the schema for the overall test result
 const testResultSchema = new mongoose.Schema({
-    patient: {
+    patientId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Patient", // Reference to the patient
         required: true,
@@ -31,7 +31,7 @@ const testResultSchema = new mongoose.Schema({
         type: String,
         required: [true, "Test title is required"], // e.g., "Lipids Profile"
     },
-    items: [testItemSchema], // Array of test items
+    testitems: [testItemSchema], // Array of test items
     date: {
         type: Date,
         default: Date.now, // When the test was conducted

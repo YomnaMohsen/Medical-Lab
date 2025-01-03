@@ -1,6 +1,7 @@
 import passwordUtils from '../utils/passwordUtils.js';
 import testResults from '../models/TestResults.js';
 import homeVisitModel from '../models/HomeVisit.js';
+import formatValidationErrors from '../utils/Customerror.js';
 import mongoose from "mongoose";
 class userController {
     // user updates its password
@@ -43,16 +44,22 @@ class userController {
     // add test result by certain doctor for certain patient
     static async addTest(req, res) {
         try {
-            const { patientId, doctorId, title, items, createdby } = req.body;
+            const { patientId, title, testitems } = req.body;
             const newtestResult = new testResults({
                 patientId,
-                doctorId,
                 title,
-                items,
-                createdby
+                testitems,
+                createdby: req.user.id,
             });
             const savedResult = await newtestResult.save();
-            return res.status(201).json({ message: "Test Results added successfully", test: savedResult });
+            const test = {
+                patientId: savedResult.patientId,
+                title: savedResult.title,
+                testItems: savedResult.testitems,
+                doctorId: savedResult.doctorId,
+                Date: savedResult.date
+            }
+            return res.status(201).json({ message: "Test Results added successfully", test_details: test });
 
         }
         catch (err) {

@@ -20,7 +20,7 @@ const alloweduser = (userModel) => {
     return async (req, res, next) => {
         const currentuser = await userModel.findById(req.user.id);
         if (!currentuser) {
-            return res.status(403).json({ message: "Forbidden" });
+            return res.status(403).json({ message: "Access denied" });
         }
         if (currentuser.passwordChangedAt && req.user.iat * 1000 < currentuser.passwordChangedAt.getTime()) {
             return res.status(401).json({ message: "user changed his password please log in again" });
