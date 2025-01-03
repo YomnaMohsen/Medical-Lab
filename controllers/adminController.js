@@ -31,7 +31,7 @@ class adminController {
             });
 
             const savedDoctor = await newDoctor.save();
-            const user = await doctorModel.findById(savedDoctor.id).select('-password');
+            const user = await doctorModel.findById(savedDoctor.id).select('name username');
             return res.status(201).json({ message: "Doctor added successfully", newDoctor: user });
         }
         catch (err) {
@@ -52,7 +52,7 @@ class adminController {
     static async getDoctor(req, res) {
         const { id } = req.params;
         try {
-            const doctor = await doctorModel.findById(req.params.id);
+            const doctor = await doctorModel.findById(req.params.id).select('name username');
             if (!doctor) {
                 return res.status(404).json({
                     error: `No doctor with this id ${id}`
