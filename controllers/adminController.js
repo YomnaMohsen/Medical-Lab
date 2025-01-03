@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken'
+import mongoose from "mongoose";
 import passwordUtils from '../utils/passwordUtils.js';
 import doctorModel from '../models/Doctor.js';
 import patientModel from '../models/Patient.js';
@@ -189,7 +189,16 @@ class adminController {
         try {
             const updatedpatient = await patientModel.findByIdAndUpdate(
                 req.params.id,
-                req.body,
+                {
+                    name: req.body.name,
+                    username: req.body.username,
+                    gender: req.body.gender,
+                    dateOfBirth: req.body.dateOfBirth,
+                    insurance: req.body.insurance,
+                    mobileNumber: req.body.mobileNumber,
+                    email: req.body.email
+                },
+                { runValidators: true },
                 { new: true }
             );
             if (!updatedpatient) {
@@ -218,8 +227,25 @@ class adminController {
             return res.status(500).json({ message: err.message });
         }
     }
-
-
+    // get all doctors 
+    static async getAllPatients(req, res) {
+        const { limit, page } = req.query;
+        const skip = (parseInt(page) - 1) * limit;
+        try {
+            const all_patients = await patientModel.find()
+                .skip(parseInt(skip))// skip certain results based on page
+                .limit(parseInt(limit))// limit no of results returned
+            if (all_patients.length === 0) {
+                return res.status(404).json({ message: "No patients can be reterived" });
+            }
+            const total_patients = await patientModel.countDocuments();
+            const totalPages = Math.ceil(total_patients / limit);
+            return res.status(200).json({ message: `Reteriving ${all_patients.length}`, total_pages: totalPages, current_page: page, patients: all_patients });
+        }
+        catch (err) {
+            return res.status(500).json({ message: err.message });
+        }
+    }
 
 }
 

@@ -13,8 +13,6 @@ userRouter.post("/doctor/login", authController.Doclogin);
 
 
 userRouter.use(authUser, alloweduser(doctorModel));
-// doctor protected routes
-userRouter.patch("/doctor/updatePassword", userController.updatePassword(doctorModel));
 // doctor adds test
 userRouter.post("/doctor/test", userController.addTest);
 // doctor gets test by certain id
@@ -27,6 +25,8 @@ userRouter.delete("/doctor/test/:id", userController.deleteTest);
 userRouter.get("/doctor/tests/:id", userController.getTestsbyDoctor);
 // doctor gets all tests for certain patient id
 userRouter.get("/doctor/Alltests/:patientid/:id", userController.AllPatientTestsbyDoctor);
+// doctor protected routes
+userRouter.patch("/doctor/updatePassword", userController.updatePassword(doctorModel));
 
 
 

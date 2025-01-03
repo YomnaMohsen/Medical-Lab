@@ -25,9 +25,11 @@ adminRouter.get("/alldoctors", authAdmin, adminController.getAllDoctors);
 adminRouter.post("/patient", authAdmin, adminController.addPatient);
 //get patient by id
 adminRouter.get("/patient/:id", authAdmin, adminController.getPatient);
+//get all patients
+adminRouter.get("/allpatients", authAdmin, adminController.getAllPatients);
 //update patient
 adminRouter.patch("/patient/:id", authAdmin, adminController.updatePatient);
 //delete patient
-adminRouter.get("/patient/:id", authAdmin, adminController.deletePatient);
+adminRouter.delete("/patient/:id", authAdmin, adminController.deletePatient);
 
 export default adminRouter;
