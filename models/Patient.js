@@ -77,6 +77,6 @@ PatientSchema.virtual("age").get(function () {
 
 // Ensure virtual fields are included when converting to JSON or Object
 PatientSchema.set("toJSON", { virtuals: true });
-PatientSchema.set('toObject', { virtuals: true });
+//PatientSchema.set('toObject', { virtuals: true });
 const patientModel = mongoose.model("Patient", PatientSchema);
 export default patientModel; 

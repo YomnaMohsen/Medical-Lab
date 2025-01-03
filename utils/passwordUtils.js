@@ -10,7 +10,7 @@ class passwordUtils {
 
     static async compare_password(password, hashed_password) {
         // compare passwords
-        const result = await bcrypt.compare(password, hashed_password);
+        const result = bcrypt.compare(password, hashed_password);
         return result;
     }
 }

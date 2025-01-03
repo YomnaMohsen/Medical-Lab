@@ -33,14 +33,15 @@ class authController {
             if (!user) {
                 return res.status(400).json({ success: false, message: "user deos not exist" });
             }
-            const isMatch = await passwordUtils.compare_password(password, user.password);
-            if (isMatch) {
-                const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-                return res.status(200).json({ message: "User login successfully", token });
-            }
-            else {
-                return res.status(401).json({ success: false, message: "Invalid Credentials" });
-            }
+            console.log(user.password);
+            /* const isMatch = passwordUtils.compare_password(password, user.password);
+             if (isMatch) {
+                 const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+                 return res.status(200).json({ message: "User login successfully", token });
+             }
+             else {
+                 return res.status(401).json({ success: false, message: "Invalid Credentials" });
+             }*/
         }
         catch (error) {
             console.log(error);
