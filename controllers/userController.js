@@ -3,6 +3,7 @@ import testResults from '../models/TestResults.js';
 import homeVisitModel from '../models/HomeVisit.js';
 import formatValidationErrors from '../utils/Customerror.js';
 import mongoose from "mongoose";
+import patientModel from '../models/Patient.js';
 class userController {
     // user updates its password
     static updatePassword(Model) {
@@ -142,25 +143,34 @@ class userController {
     }
     // get all tests by certain doctor using pagination
     static async getTestsbyDoctor(req, res) {
-        const { doctorid } = req.params;
-        const { limit, skip = 0 } = req.query;
-        if (!mongoose.Types.ObjectId.isValid(doctorid)) {
-            return res.status(400).json({ error: "Invalid ID format" });
-        }
+        const { limit = 5, page } = req.query;
+        const skip = (parseInt(page) - 1) * parseInt(limit);
 
         try {
-            const testResults = await testResults.find({ createdby: doctorid })
-                .sort({ date: -1 }) //  get the newest results
-                .skip(parseInt(skip))// skip certain results based on skip value
+            const testresults = await testResults.find({ createdby: req.user.id })
+                .skip(skip)// skip certain results based on skip value
                 .limit(parseInt(limit))// limit no of resylts returned
-                .populate("patient", "name email");
-            if (testResults.length === 0) {
+                .populate("patientId", "name dateOfBirth");
+            if (testresults.length === 0) {
                 return res.status(404).json({ message: "No test results found for this doctor" });
             }
-
+            const total_tests = await testResults.countDocuments();
+            const totalPages = Math.ceil(total_tests / limit);
+            const filteredTests = testresults.map(result => ({
+                // _id: result._id,
+                title: result.title,
+                testItems: result.testitems.map(item => ({
+                    testName: item.testName,
+                    Result: item.result,
+                    Unit: item.unit,
+                    Ref_Range: item.referenceRange
+                })),
+                date: result.date,
+                Created_by: result.createdby
+            }));
             res.status(200).json({
-                message: "Test results retrieved successfully",
-                testResults,
+                message: `Reteriving ${testresults.length}`, total_pages: totalPages,
+                current_page: page, tests: testresults
             });
         }
         catch (err) {
@@ -170,19 +180,32 @@ class userController {
     }
     // get all tests of certain patient made by certain doctor
     static async AllPatientTestsbyDoctor(req, res) {
-        const { patientid, doctorid } = req.params;
+        const { patientid } = req.params;
         try {
-            const testResults = await testResults.find({
-                patient: patientid,
-                createdby: doctorid
-            }).populate("patient", "name email").populate("createdBy", "name email");
-            if (testResults.length === 0) {
+            const patient = await patientModel.findById(patientid, "name dateOfBirth gender");
+            if (!patient) {
+                return res.status(404).json({ success: false, message: "Patient not found" });
+            }
+            const testresults = await testResults.find({
+                createdby: req.user.id,
+                patientId: patientid,
+            });
+
+            if (testresults.length === 0) {
                 return res.status(404).json({ message: "No test results found for this doctor" });
             }
-
+            const response = {
+                patient: {
+                    id: patient._id,
+                    name: patient.name,
+                    age: patient.age,
+                    gender: patient.gender,
+                },
+                tests: testresults,
+            };
             res.status(200).json({
                 message: "Test results retrieved successfully",
-                testResults,
+                response,
             });
         }
         catch (err) {
@@ -193,22 +216,20 @@ class userController {
     //***Patient Controller ******
     // patient gets certain test result 
     static async getPatientTest(req, res) {
-        const { patientid, testid } = req.params;
+        const { testid } = req.params;
         try {
-            const testResults = await testResults.findOne({
+            const testresults = await testResults.find({
                 _id: testid,
-                patient: patientid
-            }).populate({
-                path: "patient",
-                select: "name gender age", // Include age and other desired fields
-            });
-            if (testResults.length === 0) {
-                return res.status(404).json({ message: "No test results found for this doctor" });
+                patientId: req.user.id
+            }).populate("patientId", "name gender dateOfBirth"); // Include age and other desired fields
+
+            if (testresults.length === 0) {
+                return res.status(404).json({ message: "No test results found for this patient" });
             }
 
             res.status(200).json({
                 message: "Test results retrieved successfully",
-                testResults,
+                testresults,
             });
         }
         catch (err) {
@@ -217,21 +238,21 @@ class userController {
     }
     // get all tests results for certain patient
     static async AllTestsbyPatient(req, res) {
-        const { patientid } = req.params;
+
+        if (!req.user || !req.user.id) {
+            return res.status(401).json({ success: false, message: "Unauthorized" });
+        }
         try {
-            const testResults = await testResults.find({
-                patient: patientid
-            }).populate({
-                path: "patient",
-                select: "name gender age", // Include age and other desired fields
-            });
-            if (testResults.length === 0) {
-                return res.status(404).json({ message: "No test results found for this doctor" });
+            const testresults = await testResults.find({
+                patientId: req.user.id
+            }).populate("patientId", "name gender dateOfBirth");
+            if (testresults.length === 0) {
+                return res.status(404).json({ message: "No test results found for this patient" });
             }
 
             res.status(200).json({
                 message: "Test results retrieved successfully",
-                testResults,
+                testresults,
             });
         }
         catch (err) {
@@ -240,12 +261,12 @@ class userController {
     }
     // patient books home visit
     static async bookVisit(req, res) {
-        const { patientId, address } = req.body;
-        if (!patientId || !address) {
+        const { address } = req.body;
+        if (!address) {
             return res.status(400).json({ message: "Missing required fields" });
         }
         const homeVisit = new homeVisitModel({
-            patient: patientId,
+            patient: req.user.id,
             address
         }).populate("patient", "name email")
         await homeVisit.save();

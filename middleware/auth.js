@@ -18,7 +18,8 @@ const authUser = async (req, res, next) => {
 
 const alloweduser = (userModel) => {
     return async (req, res, next) => {
-        const currentuser = await userModel.findById(req.user.id);
+
+        const currentuser = await userModel.find({ _id: req.user.id });
         if (!currentuser) {
             return res.status(403).json({ message: "Access denied" });
         }

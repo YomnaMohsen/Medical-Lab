@@ -102,7 +102,7 @@ class adminController {
         }
     }
 
-    // get all doctors 
+    // get all doctors registered using pagination
     static async getAllDoctors(req, res) {
         const { limit, page } = req.query;
         const skip = (parseInt(page) - 1) * limit;
