@@ -22,7 +22,7 @@ const PatientSchema = new Schema({
         type: String,
         required: [true, "Password is required"],
         minlength: [8, "Password must be at least 8 characters long"],
-        select: false, // Prevent the password from being returned in queries
+        // select: false, // Prevent the password from being returned in queries
     },
     passwordChangedAt: Date,
     insurance: {

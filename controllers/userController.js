@@ -80,7 +80,8 @@ class userController {
             return res.status(400).json({ error: "Invalid ID format" });
         }
         try {
-            const testResult = await testResults.findById(req.params.id);
+            const testResult = await testResults.findById(req.params.id)
+                .select('patientId title testitems doctorId date');
             if (!testResult) {
                 return res.status(404).json({
                     error: `No test with this id ${id}`
@@ -99,15 +100,24 @@ class userController {
             return res.status(400).json({ error: "Invalid ID format" });
         }
         try {
-            const updatedResult = await testResults.findByIdAndUpdate(
-                req.params.id,
-                req.body,
-                { new: true }
+
+            const { testName, updates } = req.body;
+            const updateFields = {};
+            for (const [key, value] of Object.entries(updates)) {
+                updateFields[`testitems.$.${key}`] = value; // Use positional operator
+            }
+
+            const updatedTestResult = await testResults.findOneAndUpdate(
+                { _id: req.params.id, "testitems.testName": testName },
+                { $set: updateFields },
+                { new: true } // Return the updated document
             );
-            if (!updatedResult) {
+
+
+            if (!updatedTestResult) {
                 return res.status(404).json({ error: "Test result not found" });
             }
-            return res.status(200).json({ message: "Test Result updated successfully", updatedResult });
+            return res.status(200).json({ message: "Test Result updated successfully", updatedTestResult });
         }
         catch (err) {
             return res.status(500).json({ message: err.message });

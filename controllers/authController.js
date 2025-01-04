@@ -54,7 +54,7 @@ class authController {
             const { username, password } = req.body;
             const user = await patient.findOne({ username })
             if (!user) {
-                return res.status(400).json({ success: false, message: "user deos not exist" });
+                return res.status(400).json({ success: false, message: "user does not exist" });
             }
             const isMatch = await passwordUtils.compare_password(password, user.password);
             if (isMatch) {
