@@ -4,6 +4,7 @@ import homeVisitModel from '../models/HomeVisit.js';
 import formatValidationErrors from '../utils/Customerror.js';
 import mongoose from "mongoose";
 import patientModel from '../models/Patient.js';
+import sendEmail from '../config/sendEmail.js';
 class userController {
     // user updates its password
     static updatePassword(Model) {
@@ -25,7 +26,7 @@ class userController {
                 if (isSamePassword) {
                     return res.status(400).json({ message: 'New password cannot be the same as the current password' });
                 }
-                const updateddocument = await Model.findByIdAndUpdate(
+                await Model.findByIdAndUpdate(
                     userId,
                     {
                         password: await passwordUtils.gen_password(req.body.password),
@@ -261,22 +262,41 @@ class userController {
     }
     // patient books home visit
     static async bookVisit(req, res) {
-        const { address } = req.body;
-        if (!address) {
-            return res.status(400).json({ message: "Missing required fields" });
+        const { address, visitDate } = req.body;
+        try {
+            const patient = await patientModel.findById(req.user.id);
+            if (!patient) {
+                return res.status(404).json({ success: false, message: "Patient not found" });
+            }
+            if (!address) {
+                return res.status(400).json({ message: "Missing required fields" });
+            }
+
+            const parsedVisitDate = new Date(visitDate);
+            const homeVisit = new homeVisitModel({
+                patient: req.user.id,
+                address,
+                visitDate: parsedVisitDate,
+            });
+            const visit = await homeVisit.save();
+
+            const formattedVisitDate = parsedVisitDate.toLocaleString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: true,
+            });
+            await sendEmail(patient.email, formattedVisitDate);
+            res.status(201).json({
+                message: "Home visit booked successfully", Visit_details: visit
+            });
         }
-        const homeVisit = new homeVisitModel({
-            patient: req.user.id,
-            address
-        }).populate("patient", "name email")
-        await homeVisit.save();
-        res.status(201).json({
-            message: "Home visit booked successfully", Visit_details: homeVisit
-        });
-    } catch(err) {
-        res.status(500).json({ error: "Server error: " + err.message });
+        catch (err) {
+            res.status(500).json({ error: "Server error: " + err.message });
+        }
     }
 }
-
 
 export default userController;

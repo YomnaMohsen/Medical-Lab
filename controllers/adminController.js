@@ -151,7 +151,8 @@ class adminController {
                 email
             });
             const savedPatient = await newPatient.save();
-            return res.status(201).json({ message: "Patient added successfully", newPatient: savedPatient });
+            const user = await patientModel.findById(savedPatient.id).select('-password');
+            return res.status(201).json({ message: "Patient added successfully", newPatient: user });
         }
         catch (err) {
             if (err.name === "ValidationError") {
@@ -187,16 +188,15 @@ class adminController {
     // update patient
     static async updatePatient(req, res) {
         try {
+            const updates = req.body;
+            const updateFields = {};
+            for (const [key, value] of Object.entries(updates)) {
+                updateFields[`patientModel.$.${key}`] = value; // Use positional operator
+            }
             const updatedpatient = await patientModel.findByIdAndUpdate(
                 req.params.id,
                 {
-                    name: req.body.name,
-                    username: req.body.username,
-                    gender: req.body.gender,
-                    dateOfBirth: req.body.dateOfBirth,
-                    insurance: req.body.insurance,
-                    mobileNumber: req.body.mobileNumber,
-                    email: req.body.email
+                    $set: updateFields
                 },
                 { runValidators: true },
                 { new: true }

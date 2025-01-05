@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 
 
-const sendEmail = async (options) => {
+const sendEmail = async (recipientEmail, visitDate) => {
     const transporter = nodemailer.createTransport({
         service: process.env.EMAIL_SERVICE,
         auth: {
@@ -10,11 +10,18 @@ const sendEmail = async (options) => {
         },
     });
 
+    const emailContent = `
+            <h1>Home Visit Confirmation</h1>
+            <p>Dear Patient,</p>
+            <p>Your home visit has been scheduled for:</p>
+            <p><strong>${visitDate}</strong></p>
+            <p>Thank you for choosing our services!</p>
+        `;
     const mailOptions = {
         from: process.env.EMAIL_USER,
-        to: options.email,
-        subject: options.subject,
-        text: options.text
+        to: recipientEmail,
+        subject: "Home Confirmation Visit",
+        html: emailContent,
     };
 
     await transporter.sendMail(mailOptions);

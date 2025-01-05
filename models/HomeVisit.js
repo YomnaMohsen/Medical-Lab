@@ -11,12 +11,17 @@ const homeVisitSchema = new mongoose.Schema({
         trim: true,
     },
 
-    status: {
+    visitDate: {
+        type: Date,
+        required: true,
+    }
+
+    /*status: {
         type: String,
         enum: ['Pending', 'Confirmed', 'Completed', 'Cancelled'],
         default: 'Pending',
 
-    }
+    }*/
 
 });
 const homeVisitModel = mongoose.model("HomeVisit", homeVisitSchema);
