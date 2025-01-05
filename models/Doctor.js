@@ -19,6 +19,7 @@ const DoctorSchema = new Schema({
         required: [true, "Password is required"],
         minlength: [8, "Password must be at least 8 characters long"],
     },
+    passwordChangedAt: Date,
     mobileNumber: {
         type: String,
         required: [true, "Mobile number is required"],

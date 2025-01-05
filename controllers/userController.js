@@ -9,19 +9,21 @@ class userController {
     // user updates its password
     static updatePassword(Model) {
         return async (req, res) => {
-            const userId = req.params.id;
-            const { currentPassword, newPassword } = req.body;
             try {
+                const userId = req.user.id;
+                const { currentPassword, newPassword } = req.body;
                 //find user by id
-                const user = Model.findById(userId);
-                // check if curretn password is correct
+                const user = await Model.findById(userId);
+                // check if current password is correct
                 const isMatch = await passwordUtils.compare_password(currentPassword, user.password);
+
                 if (!isMatch) {
                     return res.status(400).json({ message: 'Current password is incorrect' });
                 }
 
                 //check new_password with hashed one
-                const isSamePassword = await passwordUtils.compare_password(newPassword, hashedPassword);
+
+                const isSamePassword = await passwordUtils.compare_password(newPassword, user.password);
 
                 if (isSamePassword) {
                     return res.status(400).json({ message: 'New password cannot be the same as the current password' });
@@ -29,7 +31,7 @@ class userController {
                 await Model.findByIdAndUpdate(
                     userId,
                     {
-                        password: await passwordUtils.gen_password(req.body.password),
+                        password: await passwordUtils.gen_password(req.body.newPassword),
                         passwordChangedAt: Date.now()
                     },
                     { new: true }
@@ -297,6 +299,8 @@ class userController {
             res.status(500).json({ error: "Server error: " + err.message });
         }
     }
+
+
 }
 
 export default userController;
