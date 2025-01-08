@@ -32,6 +32,6 @@ const DoctorSchema = new Schema({
         unique: true,
         match: [/\S+@\S+\.\S+/, "Invalid email address"],
     }
-});
+}, { versionKey: false });
 const doctorModel = mongoose.model("Doctor", DoctorSchema);
 export default doctorModel;

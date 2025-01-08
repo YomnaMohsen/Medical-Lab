@@ -58,7 +58,7 @@ const PatientSchema = new Schema({
         unique: true,
         match: [/\S+@\S+\.\S+/, "Invalid email address"],
     },
-});
+},);
 
 // Add a virtual field for age
 PatientSchema.virtual("age").get(function () {

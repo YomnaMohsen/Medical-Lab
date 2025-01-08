@@ -1,4 +1,6 @@
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
+import patientModel from '../models/Patient.js';
 
 // user (patient or doctor) auth middleware
 const authUser = async (req, res, next) => {
@@ -18,8 +20,11 @@ const authUser = async (req, res, next) => {
 
 const alloweduser = (userModel) => {
     return async (req, res, next) => {
-
+        if (!mongoose.Types.ObjectId.isValid(req.user.id)) {
+            return res.status(400).json({ message: "Invalid user ID" });
+        }
         const currentuser = await userModel.findById(req.user.id);
+
         if (!currentuser) {
             return res.status(403).json({ message: "Access denied" });
         }

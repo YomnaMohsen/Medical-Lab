@@ -41,6 +41,6 @@ const testResultSchema = new mongoose.Schema({
         ref: "Doctor", // Reference to the patient
         required: true,
     },
-});
+}, { versionKey: false });
 const testResults = mongoose.model("TestResult", testResultSchema);
 export default testResults;

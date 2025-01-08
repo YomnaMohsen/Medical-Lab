@@ -52,7 +52,7 @@ class adminController {
     static async getDoctor(req, res) {
         const { id } = req.params;
         try {
-            const doctor = await doctorModel.findById(req.params.id).select('name username');
+            const doctor = await doctorModel.findById(req.params.id).select('name username mobileNumber email');
             if (!doctor) {
                 return res.status(404).json({
                     error: `No doctor with this id ${id}`
@@ -67,13 +67,19 @@ class adminController {
     // update doctor
     static async updateDoctor(req, res) {
         try {
+            const updates = {};
+            if (req.body.name) updates.name = req.body.name;
+            if (req.body.username) updates.username = req.body.username;
+            if (req.body.insurance) updates.insurance = req.body.insurance;
+            if (req.body.gender) updates.gender = req.body.gender;
+            if (req.body.dateOfBirth) updates.dateOfBirth = req.body.dateOfBirth;
+            if (req.body.mobileNumber) updates.mobileNumber = req.body.mobileNumber;
+            if (req.body.email) updates.email = req.body.email;
+
             const updateddoctor = await doctorModel.findByIdAndUpdate(
                 req.params.id,
                 {
-                    name: req.body.name,
-                    username: req.body.username,
-                    mobileNumber: req.body.mobileNumber,
-                    email: req.body.email
+                    updates
                 },
                 { runValidators: true },
                 { new: true }
@@ -188,15 +194,14 @@ class adminController {
     // update patient
     static async updatePatient(req, res) {
         try {
-            const updates = req.body;
-            const updateFields = {};
-            for (const [key, value] of Object.entries(updates)) {
-                updateFields[`patientModel.$.${key}`] = value; // Use positional operator
-            }
             const updatedpatient = await patientModel.findByIdAndUpdate(
                 req.params.id,
                 {
-                    $set: updateFields
+                    name: req.body.name,
+                    username: req.body.username,
+                    insurance: req.body.insurance,
+                    mobileNumber: req.body.mobileNumber,
+                    email: req.body.email
                 },
                 { runValidators: true },
                 { new: true }
@@ -227,7 +232,7 @@ class adminController {
             return res.status(500).json({ message: err.message });
         }
     }
-    // get all doctors 
+    // get all patients
     static async getAllPatients(req, res) {
         const { limit, page } = req.query;
         const skip = (parseInt(page) - 1) * limit;

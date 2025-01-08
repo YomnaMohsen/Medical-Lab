@@ -12,32 +12,31 @@ userRouter.post("/patient/login", authController.Patlogin);
 userRouter.post("/doctor/login", authController.Doclogin);
 
 
-userRouter.use(authUser, alloweduser(doctorModel));
 // doctor adds test
-userRouter.post("/doctor/test", userController.addTest);
+userRouter.post("/doctor/test", authUser, alloweduser(doctorModel), userController.addTest);
 // doctor gets test by certain id
-userRouter.get("/doctor/test/:id", userController.getTest);
+userRouter.get("/doctor/test/:id", authUser, alloweduser(doctorModel), userController.getTest);
 // doctor updates test by certain id
-userRouter.patch("/doctor/test/:id", userController.updateTest);
+userRouter.patch("/doctor/test/:id", authUser, alloweduser(doctorModel), userController.updateTest);
 // doctor deletes test by certain id
-userRouter.delete("/doctor/test/:id", userController.deleteTest);
+userRouter.delete("/doctor/test/:id", authUser, alloweduser(doctorModel), userController.deleteTest);
 // doctor gets all tests made by him 
-userRouter.get("/doctor/tests", userController.getTestsbyDoctor);
+userRouter.get("/doctor/tests", authUser, alloweduser(doctorModel), userController.getTestsbyDoctor);
 // doctor gets all tests for certain patient id
-userRouter.get("/doctor/Alltests/:patientid", userController.AllPatientTestsbyDoctor);
+userRouter.get("/doctor/Alltests/:patientid", authUser, alloweduser(doctorModel), userController.AllPatientTestsbyDoctor);
 // doctor protected routes
-userRouter.patch("/doctor/updatePassword", userController.updatePassword(doctorModel));
+userRouter.patch("/doctor/updatePassword", authUser, alloweduser(doctorModel), userController.updatePassword(doctorModel));
 
 
 
 // patient protected routes
 /////////////////////////////////
-userRouter.use(authUser, alloweduser(patientModel));
+
 // patient gets certain test result
-userRouter.patch("/patient/updatePassword", userController.updatePassword(patientModel));
-userRouter.get("/patient/:testid", userController.getPatientTest);
-userRouter.get("/patient/", userController.AllTestsbyPatient);
-userRouter.post("/patient/appointment", userController.bookVisit);
+//userRouter.patch("/patient/updatePassword", userController.updatePassword(patientModel));
+userRouter.get("/patient/:testid", authUser, alloweduser(patientModel), userController.getPatientTest);
+userRouter.get("/patient/", authUser, alloweduser(patientModel), userController.AllTestsbyPatient);
+userRouter.post("/patient/appointment", authUser, alloweduser(patientModel), userController.bookVisit);
 
 
 export default userRouter;

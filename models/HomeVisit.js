@@ -23,6 +23,6 @@ const homeVisitSchema = new mongoose.Schema({
 
     }*/
 
-});
+}, { versionKey: false });
 const homeVisitModel = mongoose.model("HomeVisit", homeVisitSchema);
 export default homeVisitModel;
