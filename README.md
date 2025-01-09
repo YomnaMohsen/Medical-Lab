@@ -4,10 +4,10 @@
 Medical Lab API built using Node.js, Express, and MongoDB with Mongoose. The API enables creating doctors and patients accounts by administrative-staff, managing lab test results by doctors and patinets can reteriving different lab test results related them. The project is desgined to be secure by implementing authentication, authorization and data validation.
 
 ## Table of Contents
--[Project Description](#description)
--[Features](#features)
--[Technologies Used](#technologies-used)
--[Installation](#installation)
+- [Project Description](#description)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Installation](#installation)
 
 
 ## Features
