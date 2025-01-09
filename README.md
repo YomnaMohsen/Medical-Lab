@@ -56,7 +56,7 @@ Medical Lab API built using Node.js, Express, and MongoDB with Mongoose. The API
     npm install
     ```
 
-**Set up environment variables**
+### Set up environment variables
   create `.env` file in the root of your project directory and add the following variables:
    ```
    MONGO_URI = mongodb://localhost:27017/your_database_name
@@ -70,11 +70,11 @@ Medical Lab API built using Node.js, Express, and MongoDB with Mongoose. The API
    EMAIL_SERVICE = your_email_service 
    ```  
 
-**Start the server**
+### Start the server
     ```bash
     npm run start
     ```
- **Running Tests** 
+ ### Running Tests 
     ```bash
     npm run test
     ```   
