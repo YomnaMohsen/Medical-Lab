@@ -44,19 +44,19 @@ Medical Lab API built using Node.js, Express, and MongoDB with Mongoose. The API
 
 ## Installation
 
-### Clone the repository
+1.  **Clone the repository**
     ```bash
     git clone https://github.com/YomnaMohsen/Medical-Lab.git
     cd Medical-Lab
     ```
 
-### Install dependencies
+2. **Install dependencies**
 
     ```bash
     npm install
     ```
 
-### Set up environment variables
+3. **Set up environment variables**
   create `.env` file in the root of your project directory and add the following variables:
    ```
    MONGO_URI = mongodb://localhost:27017/your_database_name
@@ -70,11 +70,11 @@ Medical Lab API built using Node.js, Express, and MongoDB with Mongoose. The API
    EMAIL_SERVICE = your_email_service 
    ```  
 
-### Start the server
+3. **Start the server**
     ```bash
     npm run start
     ```
- ### Running Tests 
+4. **Running Tests** 
     ```bash
     npm run test
     ```   
