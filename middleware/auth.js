@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
-import patientModel from '../models/Patient.js';
+
 
 // user (patient or doctor) auth middleware
 const authUser = async (req, res, next) => {
