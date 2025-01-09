@@ -44,13 +44,13 @@ Medical Lab API built using Node.js, Express, and MongoDB with Mongoose. The API
 
 ## Installation
 
-1. **Clone the repository**
+### Clone the repository
     ```bash
     git clone https://github.com/YomnaMohsen/Medical-Lab.git
     cd Medical-Lab
     ```
 
-2. **Install dependencies:**
+### Install dependencies
 
     ```bash
     npm install
