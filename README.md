@@ -19,6 +19,7 @@ Medical Lab API built using Node.js, Express, and MongoDB with Mongoose. The API
 
 - **View lab test results**: Patinets can view certain lab test result or reterive all results related to them.
 
+- **Book Home Visit**: Patients can book home visit by entering their address and visit date, and a confirmation mail will be sent to them.
 
 ## Technologies Used
 
